@@ -230,11 +230,10 @@ async function main() {
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET, OPTIONS
   Access-Control-Allow-Headers: *
-  Content-Type: application/json; charset=utf-8
 `;
   fs.writeFileSync(path.join(dist, '_headers'), headers, 'utf8');
 
-  const redirects = `/ /start.json 200!
+  const redirects = `/ /start.json 200
 `;
   fs.writeFileSync(path.join(dist, '_redirects'), redirects, 'utf8');
 
