@@ -1,17 +1,5 @@
-[build]
-  command = "node generate.js"
-  publish = "public"
-
-[[redirects]]
-  from = "/"
-  to = "/start.json"
-  status = 200
-  force = true
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, OPTIONS"
-    Access-Control-Allow-Headers = "*"
-    Content-Type = "application/json; charset=utf-8"
+const startJson = {
+  name: 'IPTV Ukraine',
+  version: '1.0.0',
+  parameter: 'menu:' + BASE + '/menu.json'
+};
