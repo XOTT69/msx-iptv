@@ -1,15 +1,20 @@
 {
+  "version": 2,
   "cleanUrls": false,
   "trailingSlash": false,
   "rewrites": [
     {
       "source": "/",
       "destination": "/start.json"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ],
   "headers": [
     {
-      "source": "/(.*).json",
+      "source": "/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
@@ -22,32 +27,12 @@
         {
           "key": "Access-Control-Allow-Headers",
           "value": "*"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/json; charset=utf-8"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "no-store, no-cache, must-revalidate"
         }
       ]
     },
     {
-      "source": "/",
+      "source": "/(.*).json",
       "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "*"
-        },
         {
           "key": "Content-Type",
           "value": "application/json; charset=utf-8"
