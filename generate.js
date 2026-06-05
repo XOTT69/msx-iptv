@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PLAYLIST_URL = process.env.PLAYLIST_URL || 'https://cdnua03.hls.tv/h/04C4E0987B71CEE3/hls.m3u';
-const BASE = 'https://msx-iptv.netlify.app';
+const BASE = process.env.SITE_BASE || 'https://msx-iptv.netlify.app';
 
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
@@ -37,7 +37,7 @@ function parseM3U(text) {
       current.name = nameMatch ? nameMatch[1].trim() : 'Unknown';
 
       const groupMatch = line.match(/group-title="([^"]*)"/);
-      current.group = groupMatch ? groupMatch[1].trim() || 'Інше' : 'Інше';
+      current.group = groupMatch ? groupMatch[1].trim() || '\u0406\u043d\u0448\u0435' : '\u0406\u043d\u0448\u0435';
 
       const logoMatch = line.match(/tvg-logo="([^"]*)"/);
       current.logo = logoMatch ? logoMatch[1] : '';
@@ -79,11 +79,11 @@ function paginate(items, perPage) {
   for (let i = 0; i < items.length; i += perPage) {
     pages.push({ items: items.slice(i, i + perPage) });
   }
-  return pages.length ? pages : [{ items: [{ title: 'Порожньо' }] }];
+  return pages.length ? pages : [{ items: [{ title: '\u041f\u043e\u0440\u043e\u0436\u043d\u044c\u043e' }] }];
 }
 
 function safeFilename(name) {
-  return name.replace(/[^a-zA-Zа-яА-ЯіІїЇєЄґҐ0-9]/g, '_').toLowerCase();
+  return name.replace(/[^a-zA-Z\u0430-\u044f\u0410-\u042f\u0456\u0406\u0457\u0407\u0454\u0404\u0491\u0490'0-9]/g, '_').toLowerCase();
 }
 
 async function main() {
@@ -96,7 +96,6 @@ async function main() {
   if (fs.existsSync(dist)) fs.rmSync(dist, { recursive: true });
   fs.mkdirSync(dist, { recursive: true });
 
-  // Групи
   const groups = {};
   channels.forEach(ch => {
     if (!groups[ch.group]) groups[ch.group] = [];
@@ -120,7 +119,7 @@ async function main() {
   const menuItems = [
     {
       focus: true,
-      label: 'Усі канали',
+      label: '\u0423\u0441\u0456 \u043a\u0430\u043d\u0430\u043b\u0438',
       icon: 'live-tv',
       badge: String(channels.length),
       data: 'menu:request:interaction:content@' + BASE + '/ch_all.json'
@@ -139,7 +138,7 @@ async function main() {
 
   const menuJson = {
     response: {
-      header: { title: 'IPTV Ukraine', subtitle: channels.length + ' каналів' },
+      header: { title: 'IPTV Ukraine', subtitle: channels.length + ' \u043a\u0430\u043d\u0430\u043b\u0456\u0432' },
       menu: { cache: true, reuse: false, scrollbar: true, items: menuItems }
     }
   };
@@ -148,19 +147,19 @@ async function main() {
   // ch_all.json
   const allJson = {
     response: {
-      header: { title: 'Усі канали', subtitle: channels.length + ' каналів' },
+      header: { title: '\u0423\u0441\u0456 \u043a\u0430\u043d\u0430\u043b\u0438', subtitle: channels.length + ' \u043a\u0430\u043d\u0430\u043b\u0456\u0432' },
       pages: paginate(buildItems(channels), 12),
       template: { type: 'separate', layout: '0,0,2,2', color: 'msx-glass' }
     }
   };
   fs.writeFileSync(path.join(dist, 'ch_all.json'), JSON.stringify(allJson, null, 2));
 
-  // Кожна група
+  // Group files
   if (groupList.length > 1) {
     groupList.forEach(g => {
       const json = {
         response: {
-          header: { title: g.name, subtitle: g.count + ' каналів' },
+          header: { title: g.name, subtitle: g.count + ' \u043a\u0430\u043d\u0430\u043b\u0456\u0432' },
           pages: paginate(buildItems(groups[g.name]), 12),
           template: { type: 'separate', layout: '0,0,2,2', color: 'msx-glass' }
         }
@@ -173,7 +172,7 @@ async function main() {
   const indexHtml = '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=start.json"></head><body></body></html>';
   fs.writeFileSync(path.join(dist, 'index.html'), indexHtml);
 
-  // _headers для Netlify CORS
+  // _headers for Netlify CORS
   const headers = `/*
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET, OPTIONS
