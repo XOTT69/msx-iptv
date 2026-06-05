@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PLAYLIST_URL = process.env.PLAYLIST_URL || 'https://cdnua03.hls.tv/h/04C4E0987B71CEE3/hls.m3u';
-const BASE = 'https://msx-iptv.vercel.app';
+const BASE = 'https://msx-iptv.netlify.app/';
 
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
