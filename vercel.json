@@ -1,17 +1,7 @@
 {
   "version": 2,
-  "cleanUrls": false,
-  "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/start.json"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/$1"
-    }
-  ],
+  "buildCommand": "node generate.js",
+  "outputDirectory": "public",
   "headers": [
     {
       "source": "/(.*)",
@@ -19,27 +9,6 @@
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "*"
-        }
-      ]
-    },
-    {
-      "source": "/(.*).json",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json; charset=utf-8"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "no-store, no-cache, must-revalidate"
         }
       ]
     }
