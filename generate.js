@@ -18,7 +18,6 @@ function fetchUrl(url) {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
         return fetchUrl(res.headers.location).then(resolve).catch(reject);
       }
-
       if (res.statusCode !== 200) {
         return reject(new Error('HTTP ' + res.statusCode));
       }
@@ -125,7 +124,6 @@ async function main() {
   };
 
   fs.writeFileSync(path.join(dist, 'start.json'), JSON.stringify(startJson, null, 2));
-  fs.writeFileSync(path.join(dist, 'index.json'), JSON.stringify(startJson, null, 2));
 
   const menuItems = [
     {
@@ -197,30 +195,9 @@ async function main() {
           }
         }
       };
-
       fs.writeFileSync(path.join(dist, g.filename), JSON.stringify(json, null, 2));
     }
   }
-
-  const indexHtml = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <title>MSX IPTV</title>
-</head>
-<body>
-  <pre>MSX IPTV is running. Open /start.json</pre>
-</body>
-</html>`;
-  fs.writeFileSync(path.join(dist, 'index.html'), indexHtml);
-
-  const headers = `/*
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, OPTIONS
-  Access-Control-Allow-Headers: *
-`;
-  fs.writeFileSync(path.join(dist, '_headers'), headers);
 }
 
 main().catch(err => {
