@@ -2,6 +2,12 @@
   command = "node generate.js"
   publish = "public"
 
+[[redirects]]
+  from = "/"
+  to = "/start.json"
+  status = 200
+  force = true
+
 [[headers]]
   for = "/*"
   [headers.values]
