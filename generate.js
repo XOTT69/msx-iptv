@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const PLAYLIST_URL = process.env.PLAYLIST_URL || 'https://cdnua03.hls.tv/h/04C4E0987B71CEE3/hls.m3u';
-const BASE = 'https://msx-iptv.netlify.app/';
+const BASE = 'https://msx-iptv.netlify.app';
 
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
@@ -172,6 +172,14 @@ async function main() {
   // index.html
   const indexHtml = '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=start.json"></head><body></body></html>';
   fs.writeFileSync(path.join(dist, 'index.html'), indexHtml);
+
+  // _headers для Netlify CORS
+  const headers = `/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, OPTIONS
+  Access-Control-Allow-Headers: *
+`;
+  fs.writeFileSync(path.join(dist, '_headers'), headers);
 
   console.log('Done! Generated ' + fs.readdirSync(dist).length + ' files');
 }
