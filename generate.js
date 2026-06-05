@@ -3,36 +3,43 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const PLAYLIST_URL = process.env.PLAYLIST_URL || 'https://cdnua03.hls.tv/h/04C4E0987B71CEE3/hls.m3u';
+const PLAYLIST_URL =
+  process.env.PLAYLIST_URL ||
+  'https://cdnua03.hls.tv/h/04C4E0987B71CEE3/hls.m3u';
+
 const BASE = process.env.SITE_BASE || 'https://msx-iptv.netlify.app';
 
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
     const client = url.startsWith('https') ? https : http;
 
-    client.get(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
-      }
-    }, (res) => {
-      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return fetchUrl(res.headers.location).then(resolve).catch(reject);
-      }
+    client.get(
+      url,
+      {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+        }
+      },
+      (res) => {
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          return fetchUrl(res.headers.location).then(resolve).catch(reject);
+        }
 
-      if (res.statusCode !== 200) {
-        return reject(new Error('HTTP ' + res.statusCode));
-      }
+        if (res.statusCode !== 200) {
+          return reject(new Error('HTTP ' + res.statusCode));
+        }
 
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => resolve(data));
-      res.on('error', reject);
-    }).on('error', reject);
+        let data = '';
+        res.on('data', (chunk) => (data += chunk));
+        res.on('end', () => resolve(data));
+        res.on('error', reject);
+      }
+    ).on('error', reject);
   });
 }
 
 function parseM3U(text) {
-  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
   const channels = [];
   let current = null;
 
@@ -59,7 +66,7 @@ function parseM3U(text) {
 }
 
 function buildItems(channels) {
-  return channels.map(ch => {
+  return channels.map((ch) => {
     const item = {
       title: '',
       titleFooter: ch.name,
@@ -123,10 +130,14 @@ async function main() {
   const startJson = {
     name: 'IPTV Ukraine',
     version: '1.0.0',
-    parameter: 'menu:request:interaction:init@' + BASE + '/menu.json'
+    parameter: BASE + '/menu.json'
   };
 
-  fs.writeFileSync(path.join(dist, 'start.json'), JSON.stringify(startJson, null, 2), 'utf8');
+  fs.writeFileSync(
+    path.join(dist, 'start.json'),
+    JSON.stringify(startJson, null, 2),
+    'utf8'
+  );
 
   const menuItems = [
     {
@@ -134,7 +145,7 @@ async function main() {
       label: 'Усі канали',
       icon: 'live-tv',
       badge: String(channels.length),
-      data: 'menu:request:interaction:content@' + BASE + '/ch_all.json'
+      data: BASE + '/ch_all.json'
     }
   ];
 
@@ -143,7 +154,7 @@ async function main() {
       menuItems.push({
         label: g.name,
         badge: String(g.count),
-        data: 'menu:request:interaction:content@' + BASE + '/' + g.filename
+        data: BASE + '/' + g.filename
       });
     }
   }
@@ -155,7 +166,7 @@ async function main() {
         subtitle: channels.length + ' каналів'
       },
       menu: {
-        cache: true,
+        cache: false,
         reuse: false,
         scrollbar: true,
         items: menuItems
@@ -163,7 +174,11 @@ async function main() {
     }
   };
 
-  fs.writeFileSync(path.join(dist, 'menu.json'), JSON.stringify(menuJson, null, 2), 'utf8');
+  fs.writeFileSync(
+    path.join(dist, 'menu.json'),
+    JSON.stringify(menuJson, null, 2),
+    'utf8'
+  );
 
   const allJson = {
     response: {
@@ -180,7 +195,11 @@ async function main() {
     }
   };
 
-  fs.writeFileSync(path.join(dist, 'ch_all.json'), JSON.stringify(allJson, null, 2), 'utf8');
+  fs.writeFileSync(
+    path.join(dist, 'ch_all.json'),
+    JSON.stringify(allJson, null, 2),
+    'utf8'
+  );
 
   if (groupList.length > 1) {
     for (const g of groupList) {
@@ -199,32 +218,30 @@ async function main() {
         }
       };
 
-      fs.writeFileSync(path.join(dist, g.filename), JSON.stringify(json, null, 2), 'utf8');
+      fs.writeFileSync(
+        path.join(dist, g.filename),
+        JSON.stringify(json, null, 2),
+        'utf8'
+      );
     }
   }
 
-  // Спеціальні файли для Netlify безпосередньо у public/
   const headers = `/*
   Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, POST, OPTIONS
-  Access-Control-Allow-Headers: *
-  Content-Type: application/json; charset=utf-8
-
-/
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, POST, OPTIONS
+  Access-Control-Allow-Methods: GET, OPTIONS
   Access-Control-Allow-Headers: *
   Content-Type: application/json; charset=utf-8
 `;
   fs.writeFileSync(path.join(dist, '_headers'), headers, 'utf8');
 
-  const redirects = `/ /start.json 200!\n/index.html /start.json 200!\n`;
+  const redirects = `/ /start.json 200!
+`;
   fs.writeFileSync(path.join(dist, '_redirects'), redirects, 'utf8');
 
-  console.log('Done! Generated files:', fs.readdirSync(dist).length);
+  console.log('Done! Generated ' + fs.readdirSync(dist).length + ' files');
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err);
   process.exit(1);
 });
