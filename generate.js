@@ -7,7 +7,7 @@ const PLAYLIST_URL =
   process.env.PLAYLIST_URL ||
   'https://cdnua03.hls.tv/h/04C4E0987B71CEE3/hls.m3u';
 
-const BASE = process.env.SITE_BASE || 'https://msx-iptv.netlify.app';
+const BASE = process.env.SITE_BASE || 'https://msx-iptv.vercel.app';
 
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
@@ -225,17 +225,6 @@ async function main() {
       );
     }
   }
-
-  const headers = `/*
-  Access-Control-Allow-Origin: *
-  Access-Control-Allow-Methods: GET, OPTIONS
-  Access-Control-Allow-Headers: *
-`;
-  fs.writeFileSync(path.join(dist, '_headers'), headers, 'utf8');
-
-  const redirects = `/ /start.json 200
-`;
-  fs.writeFileSync(path.join(dist, '_redirects'), redirects, 'utf8');
 
   console.log('Done! Generated ' + fs.readdirSync(dist).length + ' files');
 }
