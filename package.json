@@ -1,0 +1,8 @@
+{
+  "name": "msx-iptv",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node generate.js"
+  }
+}
