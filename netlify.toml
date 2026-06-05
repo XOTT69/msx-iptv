@@ -2,24 +2,9 @@
   command = "node generate.js"
   publish = "public"
 
-# Перехоплюємо корінь
-[[redirects]]
-  from = "/"
-  to = "/start.json"
-  status = 200
-  force = true
-
-# Перехоплюємо взагалі ВСЕ, що не є існуючим файлом (наприклад, menu.json або ch_all.json).
-# Якщо MSX звернеться кудись не туди - ми йому віддамо start.json
-[[redirects]]
-  from = "/*"
-  to = "/start.json"
-  status = 200
-
 [[headers]]
   for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
-    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
     Access-Control-Allow-Headers = "*"
-    Content-Type = "application/json; charset=utf-8"
