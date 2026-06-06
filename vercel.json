@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": "node generate.js",
   "outputDirectory": "public",
   "headers": [
     {
@@ -10,15 +8,8 @@
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/json"
         }
       ]
     }
-  ],
-  "rewrites": [
-    { "source": "/", "destination": "/start.json" }
   ]
 }
