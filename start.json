@@ -1,0 +1,5 @@
+{
+  "name": "IPTV Ukraine",
+  "version": "1.0.0",
+  "parameter": "menu:https://msx-iptv.vercel.app/menu.json"
+}
