@@ -1,5 +1,5 @@
-const startJson = {
-  name: 'IPTV Ukraine',
-  version: '1.0.0',
-  parameter: 'menu:' + BASE + '/menu.json'
-};
+{
+  "name": "IPTV Ukraine",
+  "version": "1.0.0",
+  "parameter": "menu:https://msx-iptv.vercel.app/menu.json"
+}
