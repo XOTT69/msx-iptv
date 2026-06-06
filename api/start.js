@@ -1,4 +1,4 @@
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   const BASE = `https://${req.headers.host}`;
   res.setHeader("Content-Type", "application/json; charset=utf-8");
   res.json({
@@ -6,4 +6,4 @@ export default function handler(req, res) {
     version: "1.0.0",
     parameter: `menu:${BASE}/menu.json`
   });
-}
+};
