@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   const PLAYLIST_URL = process.env.PLAYLIST_URL;
   const group = req.query.group || "";
 
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-}
+};
 
 function parseChannels(m3u, filterGroup) {
   const lines = m3u.split("\n");
@@ -39,7 +39,6 @@ function parseChannels(m3u, filterGroup) {
     const logo = logoMatch ? logoMatch[1] : "";
     const name = nameMatch ? nameMatch[1].trim() : "Unknown";
 
-    // Наступний рядок — URL
     let url = "";
     for (let j = i + 1; j < lines.length; j++) {
       const next = lines[j].trim();
