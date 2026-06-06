@@ -1,0 +1,9 @@
+{
+  "headline": "IPTV Ukraine",
+  "menu": [
+    {
+      "label": "Тестовий канал",
+      "data": "https://msx-iptv.vercel.app/channels.json"
+    }
+  ]
+}
