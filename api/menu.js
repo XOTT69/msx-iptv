@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   const BASE = `https://${req.headers.host}`;
   const PLAYLIST_URL = process.env.PLAYLIST_URL;
 
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-}
+};
 
 function parseGroups(m3u) {
   const groups = new Set();
