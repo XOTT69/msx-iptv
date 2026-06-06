@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "outputDirectory": "public",
   "rewrites": [
     { "source": "/menu.json", "destination": "/api/menu" },
     { "source": "/channels.json", "destination": "/api/channels" }
